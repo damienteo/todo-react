@@ -1,3 +1,5 @@
+// import moment from 'moment';
+
 class List extends React.Component {
   constructor(){
     super()
@@ -28,7 +30,8 @@ class List extends React.Component {
     const {word, list} = this.state;
     // Create a length validation on the input. (Ex., must be more than 1 character and less than 200 characters)
     if (word.length >10 && word.length <200) {
-      this.setState({word: " ", validation:"", list: list.concat(word)});
+      let todo = word + " - set at: " + moment().format('LLLL');
+      this.setState({word: " ", validation:"", list: list.concat(todo)});
     } else {
       this.setState({validation: "Word length should be more than 10 characters."})
     }
@@ -47,8 +50,9 @@ class List extends React.Component {
 
   // Write a todo list item component that edits it's content.
   editHandler(event){
-    const {list} = this.state;
-    list[event.target.value] = this.state.newWord;
+    const {list, newWord} = this.state;
+    let todo = newWord + " - updated at: " + moment().format('LLLL');
+    list[event.target.value] = todo;
     this.setState({list: list, newWord: "", editing: []});
   }
 
@@ -80,6 +84,7 @@ class List extends React.Component {
       console.log("rendering");
       return (
         <div className="list">
+          <h1>{moment().format('LLLL')}</h1>
           <input onChange={this.inputHandler} value={word} />
           <AddItem addButton={this.addHandler} />
           <ShowValidation validation={validation} />
@@ -159,7 +164,7 @@ class DisplayList extends React.Component {
     let ListElements = list.map ( (item, index) => {
             return(
               <React.Fragment>
-                <li key={index}>{item}</li>
+                <li key={index}>{item} </li>
                 <button onClick={doneButton} value={index} > Set task as Done </button>
                 <button onClick={deleteTask} value={index} > Remove this task </button>
                 <button onClick={setEditMode} value={index} > Edit this task </button>
