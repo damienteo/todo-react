@@ -15,6 +15,7 @@ class List extends React.Component {
     console.log("change", event.target.value);
   }
 
+  // a button click handler that takes what is in the input, removes it from the input and pushes it into the list.
   addHandler(event){
     const {word, list} = this.state;
     this.setState({word: " ", list: list.concat(word)});
@@ -22,13 +23,12 @@ class List extends React.Component {
   }
 
   render() {
-      // render the list with a map() here
-
       console.log("rendering");
       return (
         <div className="list">
           <input onChange={this.inputHandler} value={this.state.word} />
           <AddItem addButton={this.addHandler} />
+          <DisplayList list={this.state.list} />
         </div>
       );
   }
@@ -47,6 +47,25 @@ class AddItem extends React.Component {
       >
         add item
       </button>
+    )
+  }
+}
+
+// write the code that renders the list
+
+
+class DisplayList extends React.Component {
+
+  render() {
+
+    let ListElements = this.props.list.map ( (item, index) => {
+            return <li key={index}>{item}</li>
+          });
+
+    return(
+      <ol>
+        { ListElements }
+      </ol>
     )
   }
 }
