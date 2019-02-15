@@ -7,10 +7,12 @@ class List extends React.Component {
     this.editHandler = this.editHandler.bind( this );
     this.setEditMode = this.setEditMode.bind( this );
     this.editInputHandler = this.editInputHandler.bind( this );
+    this.doneHandler = this.doneHandler.bind( this );
   }
 
   state = {
     list : [],
+    done: [],
     word : "",
     newWord : "",
     validation : "",
@@ -52,7 +54,6 @@ class List extends React.Component {
 
   setEditMode(event){
     const {editing} = this.state;
-    // console.log("editing", editing)
     if (!editing.includes(event.target.value)) {
       if (editing[0]!=undefined) {
         console.log("trying to splice",event.target.value);
@@ -65,21 +66,35 @@ class List extends React.Component {
     };
   }
 
+  // Create the ability to move todo items into a done list.
+  doneHandler(event) {
+    const {list, done} = this.state;
+    let newList = list;
+    let addToDone;
+    addToDone = newList.splice(event.target.value, 1);
+    this.setState({list: newList, done: done.concat(addToDone)});
+  }
+
   render() {
-    const {word, list, validation, editing} = this.state;
+    const {word, list, done, validation, editing} = this.state;
       console.log("rendering");
       return (
         <div className="list">
           <input onChange={this.inputHandler} value={word} />
           <AddItem addButton={this.addHandler} />
           <ShowValidation validation={validation} />
+          <h1>NOT DONE!</h1>
           <DisplayList 
             list={list} 
+            doneButton={this.doneHandler}
             deleteTask={this.deleteHandler}
             editTask={this.editHandler}
             setEditMode={this.setEditMode}
             editMode={editing}
             editInputHandler={this.editInputHandler}
+          />
+          <DisplayDone 
+            done={done}
           />
         </div>
       );
@@ -139,12 +154,13 @@ class DisplayList extends React.Component {
 
   render() {
 
-    const {deleteTask, setEditMode, editInputHandler, editTask} = this.props;
+    const {deleteTask, setEditMode, editInputHandler, editTask, doneButton, list} = this.props;
 
-    let ListElements = this.props.list.map ( (item, index) => {
+    let ListElements = list.map ( (item, index) => {
             return(
               <React.Fragment>
                 <li key={index}>{item}</li>
+                <button onClick={doneButton} value={index} > Set task as Done </button>
                 <button onClick={deleteTask} value={index} > Remove this task </button>
                 <button onClick={setEditMode} value={index} > Edit this task </button>
                 <input type= {this.showEditInput({index})} onChange={editInputHandler}/>
@@ -156,6 +172,28 @@ class DisplayList extends React.Component {
       <ol>
         { ListElements }
       </ol>
+    )
+  }
+}
+
+class DisplayDone extends React.Component {
+
+  render() {
+
+    let DoneElements = this.props.done.map ( (item, index) => {
+            return(
+              <React.Fragment>
+                <li key={index}>{item}</li>
+              </React.Fragment>
+            ) 
+          });
+    return(
+      <React.Fragment>
+        <h1>DONE!</h1>
+        <ol>
+          { DoneElements }
+        </ol>
+      </React.Fragment>
     )
   }
 }
