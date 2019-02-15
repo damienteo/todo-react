@@ -18,8 +18,11 @@ class List extends React.Component {
   // a button click handler that takes what is in the input, removes it from the input and pushes it into the list.
   addHandler(event){
     const {word, list} = this.state;
-    this.setState({word: " ", list: list.concat(word)});
-    console.log(list);
+    // Create a length validation on the input. (Ex., must be more than 1 character and less than 200 characters)
+    if (word.length >10 && word.length <200) {
+      this.setState({word: " ", list: list.concat(word)});
+      console.log(list);
+    }
   }
 
   render() {
@@ -52,8 +55,6 @@ class AddItem extends React.Component {
 }
 
 // write the code that renders the list
-
-
 class DisplayList extends React.Component {
 
   render() {
