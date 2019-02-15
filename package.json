@@ -10,5 +10,13 @@
   "license": "ISC",
   "dependencies": {
     "http-server": "^0.11.1"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/damienteo/todo-react.git"
+  },
+  "bugs": {
+    "url": "https://github.com/damienteo/todo-react/issues"
+  },
+  "homepage": "https://github.com/damienteo/todo-react#readme"
 }
