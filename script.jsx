@@ -7,7 +7,8 @@ class List extends React.Component {
 
   state = {
     list : [],
-    word : ""
+    word : "",
+    validation : ""
   }
 
   inputHandler(event){
@@ -20,8 +21,11 @@ class List extends React.Component {
     const {word, list} = this.state;
     // Create a length validation on the input. (Ex., must be more than 1 character and less than 200 characters)
     if (word.length >10 && word.length <200) {
-      this.setState({word: " ", list: list.concat(word)});
+      this.setState({word: " ", validation:"", list: list.concat(word)});
       console.log(list);
+    } else {
+      this.setState({validation: "Word length should be more than 10 characters."})
+      console.log(this.state.validation);
     }
   }
 
@@ -31,6 +35,7 @@ class List extends React.Component {
         <div className="list">
           <input onChange={this.inputHandler} value={this.state.word} />
           <AddItem addButton={this.addHandler} />
+          <ShowValidation validation={this.state.validation} />
           <DisplayList list={this.state.list} />
         </div>
       );
@@ -67,6 +72,17 @@ class DisplayList extends React.Component {
       <ol>
         { ListElements }
       </ol>
+    )
+  }
+}
+
+class ShowValidation extends React.Component {
+
+  render() {
+    return(
+      <p>
+        { this.props.validation }
+      </p>
     )
   }
 }
