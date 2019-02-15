@@ -3,6 +3,7 @@ class List extends React.Component {
     super()
     this.inputHandler = this.inputHandler.bind( this );
     this.addHandler = this.addHandler.bind( this );
+    this.deleteHandler = this.deleteHandler.bind( this );
   }
 
   state = {
@@ -29,6 +30,16 @@ class List extends React.Component {
     }
   }
 
+  // Write the code that takes things out of the list.
+  deleteHandler(event){
+    // console.log(event.target.value);
+    const {list} = this.state;
+    var removed = list.splice(event.target.value,1);
+    // console.log("removed",removed);
+    // console.log("list",list);
+    this.setState({list: list});
+  }
+
   render() {
       console.log("rendering");
       return (
@@ -36,7 +47,10 @@ class List extends React.Component {
           <input onChange={this.inputHandler} value={this.state.word} />
           <AddItem addButton={this.addHandler} />
           <ShowValidation validation={this.state.validation} />
-          <DisplayList list={this.state.list} />
+          <DisplayList 
+            list={this.state.list} 
+            deleteTask={this.deleteHandler}
+          />
         </div>
       );
   }
@@ -65,7 +79,12 @@ class DisplayList extends React.Component {
   render() {
 
     let ListElements = this.props.list.map ( (item, index) => {
-            return <li key={index}>{item}</li>
+            return(
+              <React.Fragment>
+                <li key={index}>{item}</li>
+                <button onClick={this.props.deleteTask} value={index} > Remove this task </button>
+              </React.Fragment>
+            ) 
           });
 
     return(
