@@ -22,6 +22,7 @@ class List extends React.Component {
   }
 
   inputHandler(event){
+    console.log(this);
     this.setState({word: event.target.value});
   }
 
@@ -40,8 +41,9 @@ class List extends React.Component {
   // Write the code that takes things out of the list.
   deleteHandler(event){
     const {list} = this.state;
-    var removed = list.splice(event.target.value,1);
-    this.setState({list: list});
+    let newList = [ ...list]
+    let removed = newList.splice(event.target.value,1);
+    this.setState({list: newList});
   }
 
   editInputHandler(event){
@@ -51,17 +53,18 @@ class List extends React.Component {
   // Write a todo list item component that edits it's content.
   editHandler(event){
     const {list, newWord} = this.state;
+    let newList = [ ...list]
     let todo = newWord + " - updated at: " + moment().format('LLLL');
-    list[event.target.value] = todo;
-    this.setState({list: list, newWord: "", editing: []});
+    newList[event.target.value] = todo;
+    this.setState({list: newList, newWord: "", editing: []});
   }
 
   setEditMode(event){
     const {editing} = this.state;
     if (!editing.includes(event.target.value)) {
       if (editing[0]!=undefined) {
-        console.log("trying to splice",event.target.value);
-        let newEditing = editing;
+        // console.log("trying to splice",event.target.value);
+        let newEditing = [ ...editing];
         newEditing.splice(0, 1, event.target.value);
         this.setState({editing: newEditing, newWord: ""});
       } else {
@@ -73,7 +76,7 @@ class List extends React.Component {
   // Create the ability to move todo items into a done list.
   doneHandler(event) {
     const {list, done} = this.state;
-    let newList = list;
+    let newList = [ ...list];
     let addToDone;
     addToDone = newList.splice(event.target.value, 1);
     this.setState({list: newList, done: done.concat(addToDone)});
